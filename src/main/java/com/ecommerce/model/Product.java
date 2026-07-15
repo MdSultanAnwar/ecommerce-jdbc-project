@@ -13,6 +13,7 @@ public class Product {
 
 	public Product() {
 		System.out.println("fghjhgfghja");
+		System.out.println();
 	}
 
 	public Product(String productName, String description, int price, int stockQuantity) {
