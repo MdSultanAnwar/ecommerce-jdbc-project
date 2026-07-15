@@ -12,6 +12,7 @@ public class Product {
 	private Timestamp updatedAt;
 
 	public Product() {
+		System.out.println("fghjhgfghja");
 	}
 
 	public Product(String productName, String description, int price, int stockQuantity) {
