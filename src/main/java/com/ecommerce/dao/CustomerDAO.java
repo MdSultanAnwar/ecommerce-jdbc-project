@@ -68,6 +68,7 @@ public class CustomerDAO
 		return customer;
 	}
 
+	// Find Customer By Email
 	public Customer findCustomerByEmail(String email) throws ClassNotFoundException, SQLException
 	{
 		Connection connection = DBConnection.getConnection();
