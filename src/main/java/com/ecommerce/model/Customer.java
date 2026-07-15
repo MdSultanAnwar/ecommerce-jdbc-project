@@ -1,7 +1,6 @@
 package com.ecommerce.model;
 
-import java.security.Timestamp;
-
+import java.sql.Timestamp;
 public class Customer
 {
 	private int customerId;
