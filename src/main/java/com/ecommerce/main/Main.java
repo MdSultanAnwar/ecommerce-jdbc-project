@@ -1,10 +1,10 @@
-package com.ecommerce;
+package com.ecommerce.main;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class Main 
 {
     public static void main( String[] args )
     {
