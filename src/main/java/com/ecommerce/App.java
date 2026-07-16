@@ -1,37 +1,5 @@
 package com.ecommerce;
 
-//import java.sql.SQLException;
-
-//
-//import com.ecommerce.dao.CustomerDAO;
-//import com.ecommerce.model.Customer;
-//
-//public class App 
-//{
-//    public static void main( String[] args )
-//    {
-//        Customer cust = new Customer("Shakir", "asdcdss@dsd", "98765436");
-//        CustomerDAO dao = new CustomerDAO();
-//        try
-//		{
-//			dao.registerCustomer(cust);
-//		} catch (ClassNotFoundException | SQLException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//        
-//        try
-//		{
-//			Customer customer= dao.findCustomerByEmail("asdcdss@dsb"); // output will be null
-//			System.out.println(customer);
-//		} catch (ClassNotFoundException | SQLException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    	
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
@@ -52,12 +20,18 @@ import com.ecommerce.service.OrderService;
 public class App
 {
 
+	// Scanner object for user input
 	private static final Scanner sc = new Scanner(System.in);
+
+	// DAO objects
 	private static final ProductDAO productDAO = new ProductDAO();
 	private static final CustomerDAO customerDAO = new CustomerDAO();
 	private static final CartDAO cartDAO = new CartDAO();
+
+	// Service object
 	private static final OrderService orderService = new OrderService();
 
+	// Stores the currently logged-in customer
 	private static Customer loggedInCustomer = null;
 
 	public static void main(String[] args)
@@ -65,7 +39,157 @@ public class App
 	{
 		System.out.println("=== Welcome to the Mini E-Commerce System ===");
 
+		boolean exitApp = false;
+		// Top-level menu: Admin / Customer / Exit
+		while (!exitApp)
+		{
+			printMainMenu();
+			String mainChoice = sc.nextLine().trim();
+
+			switch (mainChoice) {
+			case "1":
+				adminMenu();
+				break;
+			case "2":
+				customerMenu();
+				break;
+			case "3":
+				exitApp = true;
+				System.out.println("See You Again!!");
+				break;
+			default:
+				System.out.println("Invalid option, try again.");
+			}
+		}
+
+		sc.close();
+	}
+
+	private static void printMainMenu()
+	{
+		System.out.println();
+		System.out.println("=============================");
+		System.out.println("1. Admin");
+		System.out.println("2. Customer");
+		System.out.println("3. Exit");
+		System.out.print("Choose an option: ");
+	}
+
+	// =========================================================
+	// ADMIN PANEL (new)
+	// =========================================================
+
+	private static void adminMenu() throws ClassNotFoundException
+	{
+		boolean back = false;
+		while (!back)
+		{
+			System.out.println();
+			System.out.println("-------------------------------------------");
+			System.out.println("ADMIN PANEL");
+			System.out.println("1. Add Products");
+			System.out.println("2. View Products");
+			System.out.println("3. Delete Products");
+			System.out.println("0. Back to Main Menu");
+			System.out.print("Choose an option: ");
+			String choice = sc.nextLine().trim();
+
+			try
+			{
+				switch (choice) {
+				case "1":
+					addProduct();
+					break;
+				case "2":
+					viewProducts();
+					break;
+				case "3":
+					deleteProduct();
+					break;
+				case "0":
+					back = true;
+					break;
+				default:
+					System.out.println("Invalid option, try again.");
+				}
+			} catch (SQLException e)
+			{
+				System.out.println("Database error: " + e.getMessage());
+			} catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static void addProduct() throws ClassNotFoundException
+	{
+		System.out.print("Enter product name: ");
+		String name = sc.nextLine().trim();
+
+		System.out.print("Enter description: ");
+		String description = sc.nextLine().trim();
+
+		double price;
+		int stock;
+		try
+		{
+			System.out.print("Enter price: ");
+			price = Double.parseDouble(sc.nextLine().trim());
+
+			System.out.print("Enter stock quantity: ");
+			stock = Integer.parseInt(sc.nextLine().trim());
+		} catch (NumberFormatException e)
+		{
+			System.out.println("Invalid price or quantity. Product not added.");
+			return;
+		}
+
+		Product product = new Product(name, description, price, stock);
+		boolean added = productDAO.addProduct(product);
+
+		if (added)
+		{
+			System.out.println("Product added successfully!");
+		} else
+		{
+			System.out.println("Failed to add product.");
+		}
+	}
+
+	private static void deleteProduct() throws ClassNotFoundException
+	{
+		System.out.print("Enter Product ID to delete: ");
+		int productId;
+		try
+		{
+			productId = Integer.parseInt(sc.nextLine().trim());
+		} catch (NumberFormatException e)
+		{
+			System.out.println("Invalid Product ID.");
+			return;
+		}
+
+		boolean deleted = productDAO.deleteProduct(productId);
+
+		if (deleted)
+		{
+			System.out.println("Product deleted successfully!");
+		} else
+		{
+			System.out.println("Product not found or could not be deleted.");
+		}
+	}
+
+	// =========================================================
+	// CUSTOMER PANEL (your existing code - logic unchanged)
+	// =========================================================
+
+	private static void customerMenu()
+			throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
+	{
 		boolean running = true;
+		// Run until user goes back to main menu
 		while (running)
 		{
 			printMenu();
@@ -113,7 +237,7 @@ public class App
 					break;
 				case "0":
 					running = false;
-					System.out.println("Goodbye!");
+					System.out.println("Returning to Main Menu...");
 					break;
 				default:
 					System.out.println("Invalid option, try again.");
@@ -121,16 +245,24 @@ public class App
 			} catch (NotLoggedInException e)
 			{
 				System.out.println("You need to login first(Choose option 3 for that).");
-			} catch (IllegalStateException e)
+			} catch (ProductNotFoundException e)
 			{
-				System.out.println("Could not complete: " + e.getMessage());
+				System.out.println(e.getMessage());
+			}
+
+			catch (InvalidQuantityException e)
+			{
+				System.out.println(e.getMessage());
+			}
+
+			catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
 			} catch (SQLException e)
 			{
 				System.out.println("Database error: " + e.getMessage());
 			}
 		}
-
-		sc.close();
 	}
 
 	private static void printMenu()
@@ -149,7 +281,7 @@ public class App
 		System.out.println("8. Place Order        (login required)");
 		System.out.println("9. Order History      (login required)");
 		System.out.println("10. Logout");
-		System.out.println("0. Exit");
+		System.out.println("0. Back to Main Menu");
 		System.out.print("Choose an option: ");
 	}
 
