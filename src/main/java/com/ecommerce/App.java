@@ -10,26 +10,26 @@ package com.ecommerce;
 //{
 //    public static void main( String[] args )
 //    {
-////        Customer cust = new Customer("Shakir", "asdcdss@dsd", "98765436");
-////        CustomerDAO dao = new CustomerDAO();
-////        try
-////		{
-////			dao.registerCustomer(cust);
-////		} catch (ClassNotFoundException | SQLException e)
-////		{
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
-////        
-////        try
-////		{
-////			Customer customer= dao.findCustomerByEmail("asdcdss@dsb"); // output will be null
-////			System.out.println(customer);
-////		} catch (ClassNotFoundException | SQLException e)
-////		{
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
+//        Customer cust = new Customer("Shakir", "asdcdss@dsd", "98765436");
+//        CustomerDAO dao = new CustomerDAO();
+//        try
+//		{
+//			dao.registerCustomer(cust);
+//		} catch (ClassNotFoundException | SQLException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//        
+//        try
+//		{
+//			Customer customer= dao.findCustomerByEmail("asdcdss@dsb"); // output will be null
+//			System.out.println(customer);
+//		} catch (ClassNotFoundException | SQLException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 //    	
 
 import java.sql.SQLException;
@@ -39,6 +39,9 @@ import java.util.Scanner;
 import com.ecommerce.dao.CartDAO;
 import com.ecommerce.dao.CustomerDAO;
 import com.ecommerce.dao.ProductDAO;
+import com.ecommerce.exception.InvalidQuantityException;
+import com.ecommerce.exception.NotLoggedInException;
+import com.ecommerce.exception.ProductNotFoundException;
 import com.ecommerce.model.Cart;
 import com.ecommerce.model.Customer;
 import com.ecommerce.model.Order;
@@ -57,7 +60,7 @@ public class App
 
 	private static Customer loggedInCustomer = null;
 
-	public static void main(String[] args) throws ClassNotFoundException
+	public static void main(String[] args) throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
 	{
 		System.out.println("=== Welcome to the Mini E-Commerce System ===");
 
@@ -218,7 +221,8 @@ public class App
 		System.out.println("Registered and logged in as " + name);
 	}
 
-	private static void addToCart() throws SQLException, ClassNotFoundException
+	private static void addToCart()
+			throws SQLException, ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
 	{
 		System.out.print("Enter exact product name to add: ");
 		String name = sc.nextLine().trim();
@@ -226,8 +230,7 @@ public class App
 		Product product = productDAO.findProductByName(name);
 		if (product == null)
 		{
-			System.out.println("No product found named '" + name + "'.");
-			return;
+			throw new ProductNotFoundException("Product not found..");
 		}
 
 		System.out.print("Enter quantity: ");
@@ -242,8 +245,7 @@ public class App
 		}
 		if (qty <= 0)
 		{
-			System.out.println("Quantity must be positive.");
-			return;
+			throw new InvalidQuantityException("Quantity must be positive");
 		}
 
 		cartDAO.addToCart(loggedInCustomer.getCustomerId(), product.getProductId(), qty);
@@ -302,11 +304,4 @@ public class App
 		}
 	}
 
-	/**
-	 * Thrown internally when an action requiring login is attempted while logged
-	 * out.
-	 */
-	private static class NotLoggedInException extends Exception
-	{
-	}
 }
