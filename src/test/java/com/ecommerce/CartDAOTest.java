@@ -30,7 +30,7 @@ public class CartDAOTest
 		assertFalse(cartList.isEmpty());
 		assertEquals(productId, cartList.get(0).getProductId());
 		assertEquals(2, cartList.get(0).getQuantity());
-	}
+	} 
 
 	@Test
 	public void testAddExistingProductUpdateQuantity() throws SQLException, ClassNotFoundException

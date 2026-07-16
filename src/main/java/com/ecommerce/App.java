@@ -76,7 +76,7 @@ public class App
 	}
 
 	// =========================================================
-	// ADMIN PANEL (new)
+	// ADMIN PANEL  
 	// =========================================================
 
 	private static void adminMenu() throws ClassNotFoundException
@@ -181,9 +181,7 @@ public class App
 		}
 	}
 
-	// =========================================================
-	// CUSTOMER PANEL (your existing code - logic unchanged)
-	// =========================================================
+ 
 
 	private static void customerMenu()
 			throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException

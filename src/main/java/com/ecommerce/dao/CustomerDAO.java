@@ -98,6 +98,6 @@ public class CustomerDAO
 		ps.close();
 		connection.close();
 
-		return customer;
+		return customer; 
 	}
 }
