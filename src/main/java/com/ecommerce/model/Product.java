@@ -6,17 +6,16 @@ public class Product {
 	private String productName;
 	private int productId;
 	private String description;
-	private int price;
+	private double price;
 	private int stockQuantity;
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 
 	public Product() {
-		System.out.println("fghjhgfghja");
-		System.out.println();
+
 	}
 
-	public Product(String productName, String description, int price, int stockQuantity) {
+	public Product(String productName, String description, double price, int stockQuantity) {
 		super();
 		this.productName = productName;
 		this.description = description;
@@ -24,8 +23,7 @@ public class Product {
 		this.stockQuantity = stockQuantity;
 	}
 
-	
-	public Product(int productId, String productName, String description, int price, int stockQuantity,
+	public Product(int productId, String productName, String description, double price, int stockQuantity,
 			Timestamp createdAt, Timestamp updatedAt) {
 		this.productId = productId;
 		this.productName = productName;
@@ -36,7 +34,6 @@ public class Product {
 		this.updatedAt = updatedAt;
 	}
 
-	
 	public String getProductName() {
 		return productName;
 	}
@@ -61,11 +58,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
