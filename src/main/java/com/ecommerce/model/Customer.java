@@ -1,8 +1,9 @@
 package com.ecommerce.model;
 
 import java.sql.Timestamp;
-public class Customer
-{
+
+public class Customer {
+
 	private int customerId;
 	private String customerName;
 	private String email;
@@ -10,22 +11,17 @@ public class Customer
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 
-	public Customer()
-	{
+	public Customer() {
 	}
 
-	public Customer(String customerName, String email, String mobile)
-	{
-		super();
+	public Customer(String customerName, String email, String mobile) {
 		this.customerName = customerName;
 		this.email = email;
 		this.mobile = mobile;
 	}
 
 	public Customer(int customerId, String customerName, String email, String mobile, Timestamp createdAt,
-			Timestamp updatedAt)
-	{
-		super();
+			Timestamp updatedAt) {
 		this.customerId = customerId;
 		this.customerName = customerName;
 		this.email = email;
@@ -34,70 +30,57 @@ public class Customer
 		this.updatedAt = updatedAt;
 	}
 
-	public int getCustomerId()
-	{
+	public int getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(int customerId)
-	{
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 
-	public String getCustomerName()
-	{
+	public String getCustomerName() {
 		return customerName;
 	}
 
-	public void setCustomerName(String customerName)
-	{
+	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
 
-	public String getEmail()
-	{
+	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email)
-	{
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public String getMobile()
-	{
+	public String getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(String mobile)
-	{
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
-	public Timestamp getCreatedAt()
-	{
+	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Timestamp createdAt)
-	{
+	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdatedAt()
-	{
+	public Timestamp getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(Timestamp updatedAt)
-	{
+	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "Customer{" + "customerId=" + customerId + ", customerName='" + customerName + '\'' + ",  email='" + email
+	public String toString() {
+		return "Customer{" + "customerId=" + customerId + ", customerName='" + customerName + '\'' + ", email='" + email
 				+ '\'' + ", mobile='" + mobile + '\'' + '}';
 	}
 }

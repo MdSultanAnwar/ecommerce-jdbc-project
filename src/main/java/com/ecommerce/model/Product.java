@@ -2,21 +2,23 @@ package com.ecommerce.model;
 
 import java.sql.Timestamp;
 
-public class Product {
+public class Product
+{
 	private String productName;
 	private int productId;
 	private String description;
-	private int price;
+	private double price;
 	private int stockQuantity;
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 
-	public Product() {
-		System.out.println("fghjhgfghja");
-		System.out.println();
+	public Product()
+	{
+
 	}
 
-	public Product(String productName, String description, int price, int stockQuantity) {
+	public Product(String productName, String description, double price, int stockQuantity)
+	{
 		super();
 		this.productName = productName;
 		this.description = description;
@@ -24,9 +26,9 @@ public class Product {
 		this.stockQuantity = stockQuantity;
 	}
 
-	
-	public Product(int productId, String productName, String description, int price, int stockQuantity,
-			Timestamp createdAt, Timestamp updatedAt) {
+	public Product(int productId, String productName, String description, double price, int stockQuantity,
+			Timestamp createdAt, Timestamp updatedAt)
+	{
 		this.productId = productId;
 		this.productName = productName;
 		this.description = description;
@@ -36,61 +38,81 @@ public class Product {
 		this.updatedAt = updatedAt;
 	}
 
-	
-	public String getProductName() {
+	public String getProductName()
+	{
 		return productName;
 	}
 
-	public void setProductName(String productName) {
+	public void setProductName(String productName)
+	{
 		this.productName = productName;
 	}
 
-	public int getProductId() {
+	public int getProductId()
+	{
 		return productId;
 	}
 
-	public void setProductId(int productId) {
+	public void setProductId(int productId)
+	{
 		this.productId = productId;
 	}
 
-	public String getDescription() {
+	public String getDescription()
+	{
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(String description)
+	{
 		this.description = description;
 	}
 
-	public int getPrice() {
+	public double getPrice()
+	{
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price)
+	{
 		this.price = price;
 	}
 
-	public int getStockQuantity() {
+	public int getStockQuantity()
+	{
 		return stockQuantity;
 	}
 
-	public void setStockQuantity(int stockQuantity) {
+	public void setStockQuantity(int stockQuantity)
+	{
 		this.stockQuantity = stockQuantity;
 	}
 
-	public Timestamp getCreatedAt() {
+	public Timestamp getCreatedAt()
+	{
 		return createdAt;
 	}
 
-	public void setCreatedAt(Timestamp createdAt) {
+	public void setCreatedAt(Timestamp createdAt)
+	{
 		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdatedAt() {
+	public Timestamp getUpdatedAt()
+	{
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(Timestamp updatedAt) {
+	public void setUpdatedAt(Timestamp updatedAt)
+	{
 		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("[%d] %-20s | Rs.%-10s | Stock: %d | %s", productId, productName, price, stockQuantity,
+				description == null ? "" : description);
 	}
 
 }
