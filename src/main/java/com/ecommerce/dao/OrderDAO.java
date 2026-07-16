@@ -9,34 +9,40 @@ import com.ecommerce.model.Order;
 import com.ecommerce.model.OrderItem;
 import com.ecommerce.util.DBConnection;
 
-public class OrderDAO {
+public class OrderDAO
+{
 
 	private ProductDAO productDAO = new ProductDAO();
 	private CartDAO cartDAO = new CartDAO();
 
-	public int placeOrder(int customerId) throws SQLException, ClassNotFoundException {
+	public int placeOrder(int customerId) throws SQLException, ClassNotFoundException
+	{
 
 		Connection conn = null;
 		int orderId = 0;
 
-		try {
+		try
+		{
 
 			conn = DBConnection.getConnection();
 			conn.setAutoCommit(false);
 
-			List<Cart> cartItems = cartDAO.viewCart(conn, customerId);
+			List<Cart> cartItems = cartDAO.viewCart(customerId);
 
-			if (cartItems.isEmpty()) {
+			if (cartItems.isEmpty())
+			{
 				throw new RuntimeException("Cart is Empty");
 			}
 
 			double totalAmount = 0;
 
-			for (Cart item : cartItems) {
+			for (Cart item : cartItems)
+			{
 
 				int stock = productDAO.getStockForUpdate(conn, item.getProductId());
 
-				if (stock < item.getQuantity()) {
+				if (stock < item.getQuantity())
+				{
 					throw new RuntimeException("Insufficient Stock : " + item.getProductName());
 				}
 
@@ -55,7 +61,8 @@ public class OrderDAO {
 
 			ResultSet rs = orderPs.getGeneratedKeys();
 
-			if (rs.next()) {
+			if (rs.next())
+			{
 				orderId = rs.getInt(1);
 			}
 
@@ -63,7 +70,8 @@ public class OrderDAO {
 
 			PreparedStatement itemPs = conn.prepareStatement(itemSql);
 
-			for (Cart item : cartItems) {
+			for (Cart item : cartItems)
+			{
 
 				itemPs.setInt(1, orderId);
 				itemPs.setInt(2, item.getProductId());
@@ -77,23 +85,27 @@ public class OrderDAO {
 
 			itemPs.executeBatch();
 
-			cartDAO.clearCart(conn, customerId);
+			cartDAO.clearCart(customerId);
 
 			conn.commit();
 
 			System.out.println("Order Placed Successfully");
 
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 
-			if (conn != null) {
+			if (conn != null)
+			{
 				conn.rollback();
 			}
 
 			throw new RuntimeException(e.getMessage());
 
-		} finally {
+		} finally
+		{
 
-			if (conn != null) {
+			if (conn != null)
+			{
 				conn.setAutoCommit(true);
 				conn.close();
 			}
@@ -102,19 +114,22 @@ public class OrderDAO {
 		return orderId;
 	}
 
-	public List<Order> viewOrders(int customerId) throws SQLException, ClassNotFoundException {
+	public List<Order> viewOrders(int customerId) throws SQLException, ClassNotFoundException
+	{
 
 		List<Order> orders = new ArrayList<>();
 
 		String sql = "SELECT * FROM orders WHERE customer_id = ? ORDER BY order_id DESC";
 
-		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
+		{
 
 			ps.setInt(1, customerId);
 
 			ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
+			while (rs.next())
+			{
 
 				Order order = new Order();
 
@@ -133,20 +148,23 @@ public class OrderDAO {
 		return orders;
 	}
 
-	public List<OrderItem> viewOrderItems(int orderId) throws SQLException, ClassNotFoundException {
+	public List<OrderItem> viewOrderItems(int orderId) throws SQLException, ClassNotFoundException
+	{
 
 		List<OrderItem> items = new ArrayList<>();
 
 		String sql = "SELECT oi.*, p.product_name " + "FROM order_items oi "
 				+ "JOIN products p ON oi.product_id = p.product_id " + "WHERE oi.order_id = ?";
 
-		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
+		{
 
 			ps.setInt(1, orderId);
 
 			ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
+			while (rs.next())
+			{
 
 				OrderItem item = new OrderItem();
 
@@ -164,11 +182,13 @@ public class OrderDAO {
 		return items;
 	}
 
-	public boolean cancelOrder(int orderId) throws SQLException, ClassNotFoundException {
+	public boolean cancelOrder(int orderId) throws SQLException, ClassNotFoundException
+	{
 
 		String sql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
 
-		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql))
+		{
 
 			ps.setString(1, "CANCELLED");
 			ps.setInt(2, orderId);

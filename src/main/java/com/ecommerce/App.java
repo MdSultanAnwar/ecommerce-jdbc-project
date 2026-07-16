@@ -60,7 +60,8 @@ public class App
 
 	private static Customer loggedInCustomer = null;
 
-	public static void main(String[] args) throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
+	public static void main(String[] args)
+			throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
 	{
 		System.out.println("=== Welcome to the Mini E-Commerce System ===");
 
@@ -96,13 +97,17 @@ public class App
 					break;
 				case "7":
 					requireLogin();
-					placeOrder();
+					removeAllFromCart();
 					break;
 				case "8":
 					requireLogin();
-					viewOrderHistory();
+					placeOrder();
 					break;
 				case "9":
+					requireLogin();
+					viewOrderHistory();
+					break;
+				case "10":
 					loggedInCustomer = null;
 					System.out.println("Logged out.");
 					break;
@@ -133,16 +138,17 @@ public class App
 		System.out.println();
 		System.out.println("-------------------------------------------");
 		System.out.println("Logged in as: "
-			     + (loggedInCustomer == null ? "guest (not logged in)" : loggedInCustomer.getCustomerName()));
+				+ (loggedInCustomer == null ? "guest (not logged in)" : loggedInCustomer.getCustomerName()));
 		System.out.println("1. View Products      (no login needed)");
 		System.out.println("2. Search Products    (no login needed)");
 		System.out.println("3. Login / Register");
 		System.out.println("4. Add To Cart        (login required)");
 		System.out.println("5. View Cart          (login required)");
 		System.out.println("6. Remove From Cart   (login required)");
-		System.out.println("7. Place Order        (login required)");
-		System.out.println("8. Order History      (login required)");
-		System.out.println("9. Logout");
+		System.out.println("7. Clear Cart         (login required)");
+		System.out.println("8. Place Order        (login required)");
+		System.out.println("9. Order History      (login required)");
+		System.out.println("10. Logout");
 		System.out.println("0. Exit");
 		System.out.print("Choose an option: ");
 	}
@@ -277,6 +283,12 @@ public class App
 
 		cartDAO.removeFromCart(loggedInCustomer.getCustomerId(), product.getProductId());
 		System.out.println("'" + product.getProductName() + "' removed from cart (if it was there).");
+	}
+
+	private static void removeAllFromCart() throws ClassNotFoundException, SQLException
+	{
+		cartDAO.clearCart(loggedInCustomer.getCustomerId());
+		System.out.println("All products removed from the cart.!!");
 	}
 
 	private static void placeOrder() throws SQLException, ClassNotFoundException
