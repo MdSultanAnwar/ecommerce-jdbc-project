@@ -160,7 +160,7 @@ public class App
 		Product product = new Product(name, description, price, stock);
 		boolean added = productDAO.addProduct(product);
 
-		if (added)
+		if (added) 
 		{
 			System.out.println("Product added successfully!");
 		} else
@@ -416,7 +416,19 @@ public class App
 			System.out.println("Your cart is empty.");
 			return;
 		}
-		items.forEach(System.out::println);
+
+		double grandTotal = 0;
+
+		for (Cart cart : items)
+		{
+			System.out.println(cart);
+
+			grandTotal = grandTotal + cart.getLineTotal();
+		}
+
+		System.out.println("----------------------------------");
+		System.out.println("Grand Total : Rs. " + grandTotal);
+		System.out.println("----------------------------------");
 	}
 
 	private static void removeFromCart() throws SQLException, ClassNotFoundException

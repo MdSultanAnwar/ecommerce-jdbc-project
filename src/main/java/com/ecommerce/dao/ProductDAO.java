@@ -11,7 +11,7 @@ import com.ecommerce.model.Product;
 import com.ecommerce.util.DBConnection;
 
 public class ProductDAO
-{
+{ 
 
 	// Add Product
 	public boolean addProduct(Product product) throws ClassNotFoundException
