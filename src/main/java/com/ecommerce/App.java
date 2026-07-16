@@ -37,7 +37,9 @@ public class App
 	public static void main(String[] args)
 			throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
 	{
-		System.out.println("=== Welcome to the Mini E-Commerce System ===");
+		System.out.println();
+
+		System.out.println("     WELCOME TO MINI E-COMMERCE SYSTEM");
 
 		boolean exitApp = false;
 		// Top-level menu: Admin / Customer / Exit
@@ -55,7 +57,11 @@ public class App
 				break;
 			case "3":
 				exitApp = true;
-				System.out.println("See You Again!!");
+				System.out.println();
+				System.out.println("=========================================");
+				System.out.println("      Thank You For Visiting");
+				System.out.println("     (MINI E-COMMERCE SYSTEM)");
+				System.out.println("=========================================");
 				break;
 			default:
 				System.out.println("Invalid option, try again.");
@@ -68,11 +74,14 @@ public class App
 	private static void printMainMenu()
 	{
 		System.out.println();
-		System.out.println("=============================");
+		System.out.println("=========================================");
+		System.out.println("                MAIN MENU");
+		System.out.println("=========================================");
 		System.out.println("1. Admin");
 		System.out.println("2. Customer");
 		System.out.println("3. Exit");
-		System.out.print("Choose an option: ");
+		System.out.println("=========================================");
+		System.out.print("Enter Choice : ");
 	}
 
 	// =========================================================
@@ -86,11 +95,14 @@ public class App
 		{
 			System.out.println();
 			System.out.println("-------------------------------------------");
-			System.out.println("ADMIN PANEL");
+			System.out.println("=========================================");
+			System.out.println("              ADMIN PANEL");
+			System.out.println("=========================================");
 			System.out.println("1. Add Products");
 			System.out.println("2. View Products");
 			System.out.println("3. Delete Products");
 			System.out.println("0. Back to Main Menu");
+			System.out.println("=========================================");
 			System.out.print("Choose an option: ");
 			String choice = sc.nextLine().trim();
 
@@ -263,21 +275,28 @@ public class App
 	private static void printMenu()
 	{
 		System.out.println();
-		System.out.println("-------------------------------------------");
-		System.out.println("Logged in as: "
-				+ (loggedInCustomer == null ? "guest (not logged in)" : loggedInCustomer.getCustomerName()));
-		System.out.println("1. View Products      (no login needed)");
-		System.out.println("2. Search Products    (no login needed)");
+		System.out.println("=========================================");
+		System.out.println("           CUSTOMER PANEL");
+		System.out.println("=========================================");
+
+		System.out.println("Logged In : " + (loggedInCustomer == null ? "Guest" : loggedInCustomer.getCustomerName()));
+
+		System.out.println("-----------------------------------------");
+
+		System.out.println("1. View Products");
+		System.out.println("2. Search Products");
 		System.out.println("3. Login / Register");
-		System.out.println("4. Add To Cart        (login required)");
-		System.out.println("5. View Cart          (login required)");
-		System.out.println("6. Remove From Cart   (login required)");
-		System.out.println("7. Clear Cart         (login required)");
-		System.out.println("8. Place Order        (login required)");
-		System.out.println("9. Order History      (login required)");
+		System.out.println("4. Add To Cart");
+		System.out.println("5. View Cart");
+		System.out.println("6. Remove From Cart");
+		System.out.println("7. Clear Cart");
+		System.out.println("8. Place Order");
+		System.out.println("9. Order History");
 		System.out.println("10. Logout");
-		System.out.println("0. Back to Main Menu");
-		System.out.print("Choose an option: ");
+		System.out.println("0. Back");
+
+		System.out.println("=========================================");
+		System.out.print("Enter Choice : ");
 	}
 
 	private static void requireLogin() throws NotLoggedInException
@@ -351,7 +370,11 @@ public class App
 		// Customer ko DB se wapas fetch kar lo email ke basis par
 		loggedInCustomer = customerDAO.findCustomerByEmail(email);
 
-		System.out.println("Registered and logged in as " + name);
+		System.out.println();
+		System.out.println("=========================================");
+		System.out.println(" Login Successful");
+		System.out.println(" Welcome " + existing.getCustomerName());
+		System.out.println("=========================================");
 	}
 
 	private static void addToCart()
@@ -421,7 +444,11 @@ public class App
 	private static void placeOrder() throws SQLException, ClassNotFoundException
 	{
 		int orderId = orderService.placeOrder(loggedInCustomer.getCustomerId());
-		System.out.println("Order placed successfully! Order ID: " + orderId);
+		System.out.println();
+		System.out.println("=========================================");
+		System.out.println(" ORDER PLACED SUCCESSFULLY");
+		System.out.println(" Order ID : " + orderId);
+		System.out.println("=========================================");
 	}
 
 	private static void viewOrderHistory() throws SQLException, ClassNotFoundException
