@@ -115,7 +115,7 @@ public class App
 				}
 			} catch (NotLoggedInException e)
 			{
-				System.out.println("You need to login first (option 3) to do that.");
+				System.out.println("You need to login first(Choose option 3 for that).");
 			} catch (IllegalStateException e)
 			{
 				System.out.println("Could not complete: " + e.getMessage());
@@ -133,15 +133,15 @@ public class App
 		System.out.println();
 		System.out.println("-------------------------------------------");
 		System.out.println("Logged in as: "
-				+ (loggedInCustomer == null ? "guest (not logged in)" : loggedInCustomer.getCustomerName()));
-		System.out.println("1. View Products         (no login needed)");
-		System.out.println("2. Search Products        (no login needed)");
+			     + (loggedInCustomer == null ? "guest (not logged in)" : loggedInCustomer.getCustomerName()));
+		System.out.println("1. View Products      (no login needed)");
+		System.out.println("2. Search Products    (no login needed)");
 		System.out.println("3. Login / Register");
-		System.out.println("4. Add To Cart            (login required)");
-		System.out.println("5. View Cart              (login required)");
-		System.out.println("6. Remove From Cart       (login required)");
-		System.out.println("7. Place Order            (login required)");
-		System.out.println("8. Order History          (login required)");
+		System.out.println("4. Add To Cart        (login required)");
+		System.out.println("5. View Cart          (login required)");
+		System.out.println("6. Remove From Cart   (login required)");
+		System.out.println("7. Place Order        (login required)");
+		System.out.println("8. Order History      (login required)");
 		System.out.println("9. Logout");
 		System.out.println("0. Exit");
 		System.out.print("Choose an option: ");
@@ -172,7 +172,7 @@ public class App
 
 	private static void searchProduct() throws SQLException, ClassNotFoundException
 	{
-		System.out.print("Enter product name (or part of it): ");
+		System.out.print("Enter product name : ");
 		String keyword = sc.nextLine().trim();
 		List<Product> results = productDAO.searchProduct(keyword);
 		if (results.isEmpty())
