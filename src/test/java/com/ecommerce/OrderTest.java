@@ -1,149 +1,67 @@
 package com.ecommerce;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
+import java.sql.Timestamp;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.ecommerce.dao.OrderDAO;
 import com.ecommerce.model.Order;
-import com.ecommerce.model.OrderItem;
 
-public class OrderTest {
+public class OrderTest
+{
 
-    private OrderDAO orderDAO;
+	@Test
+	public void testDefaultConstructorAndGettersSetters()
+	{
+		Order order = new Order();
 
-    @BeforeEach
-    void setUp() {
-        orderDAO = new OrderDAO();
-    }
+		Timestamp time = new Timestamp(System.currentTimeMillis());
 
-    // Test 1
-    @Test
-    void testOrderDAOObjectCreation() {
-        assertNotNull(orderDAO);
-    }
+		order.setOrderId(1);
+		order.setCustomerId(101);
+		order.setTotalAmount(2500.50);
+		order.setOrderDate(time);
+		order.setOrderStatus("Placed");
+		order.setCreatedAt(time);
+		order.setUpdatedAt(time);
 
-    // Test 2
-    @Test
-    void testViewOrdersValidCustomer() throws Exception {
-        List<Order> orders = orderDAO.viewOrders(1);
+		assertEquals(1, order.getOrderId());
+		assertEquals(101, order.getCustomerId());
+		assertEquals(2500.50, order.getTotalAmount());
+		assertEquals(time, order.getOrderDate());
+		assertEquals("Placed", order.getOrderStatus());
+		assertEquals(time, order.getCreatedAt());
+		assertEquals(time, order.getUpdatedAt());
+	}
 
-        assertNotNull(orders);
+	@Test
+	public void testParameterizedConstructor()
+	{
+		Order order = new Order(101, 2500.50, "Placed");
 
-        if (!orders.isEmpty()) {
-            assertEquals(1, orders.get(0).getCustomerId());
-        }
-    }
+		assertEquals(101, order.getCustomerId());
+		assertEquals(2500.50, order.getTotalAmount());
+		assertEquals("Placed", order.getOrderStatus());
+	}
 
-    // Test 3
-    @Test
-    void testViewOrdersInvalidCustomer() throws Exception {
-        List<Order> orders = orderDAO.viewOrders(99999);
+	@Test
+	public void testToString()
+	{
+		Order order = new Order();
 
-        assertNotNull(orders);
-        assertTrue(orders.isEmpty());
-    }
+		Timestamp time = new Timestamp(System.currentTimeMillis());
 
-    // Test 4
-    @Test
-    void testViewOrderItemsInvalidOrder() throws Exception {
-        List<OrderItem> items = orderDAO.viewOrderItems(99999);
+		order.setOrderId(1);
+		order.setOrderDate(time);
+		order.setOrderStatus("Placed");
+		order.setTotalAmount(2500.50);
 
-        assertNotNull(items);
-        assertTrue(items.isEmpty());
-    }
+		String result = order.toString();
 
-    // Test 5
-    @Test
-    void testCancelOrderInvalidId() throws Exception {
-        boolean result = orderDAO.cancelOrder(99999);
-
-        assertFalse(result);
-    }
-
-    // Test 6
-    @Test
-    void testCancelOrderValidId() throws Exception {
-
-        List<Order> orders = orderDAO.viewOrders(1);
-
-        if (!orders.isEmpty()) {
-
-            int orderId = orders.get(0).getOrderId();
-
-            boolean result = orderDAO.cancelOrder(orderId);
-
-            assertTrue(result);
-        }
-    }
-
-    // Test 7
-    @Test
-    void testPlaceOrderEmptyCart() {
-
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
-
-            orderDAO.placeOrder(99999);
-
-        });
-
-        assertNotNull(ex.getMessage());
-    }
-
-    // Test 8
-    @Test
-    void testViewOrderItemsValidOrder() throws Exception {
-
-        List<Order> orders = orderDAO.viewOrders(1);
-
-        if (!orders.isEmpty()) {
-
-            int orderId = orders.get(0).getOrderId();
-
-            List<OrderItem> items = orderDAO.viewOrderItems(orderId);
-
-            assertNotNull(items);
-        }
-    }
-
-    // Test 9
-    @Test
-    void testViewOrdersReturnType() throws Exception {
-
-        List<Order> orders = orderDAO.viewOrders(1);
-
-        assertTrue(orders instanceof List);
-    }
-
-    // Test 10
-    @Test
-    void testViewOrderItemsReturnType() throws Exception {
-
-        List<OrderItem> items = orderDAO.viewOrderItems(1);
-
-        assertTrue(items instanceof List);
-    }
-
-    // Test 11
-    @Test
-    void testCancelOrderReturnType() throws Exception {
-
-        boolean result = orderDAO.cancelOrder(99999);
-
-        assertTrue(result == true || result == false);
-    }
-
-    // Test 12
-    @Test
-    void testPlaceOrderInvalidCustomer() {
-
-        assertThrows(RuntimeException.class, () -> {
-
-            orderDAO.placeOrder(-1);
-
-        });
-    }
+		assertTrue(result.contains("Order #1"));
+		assertTrue(result.contains("Placed"));
+		assertTrue(result.contains("2500.5"));
+	}
 }

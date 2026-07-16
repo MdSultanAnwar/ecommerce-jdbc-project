@@ -76,7 +76,7 @@ public class App
 	}
 
 	// =========================================================
-	// ADMIN PANEL  
+	// ADMIN PANEL
 	// =========================================================
 
 	private static void adminMenu() throws ClassNotFoundException
@@ -181,10 +181,7 @@ public class App
 		}
 	}
 
- 
-
-	private static void customerMenu()
-			throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
+	private static void customerMenu() throws ClassNotFoundException, ProductNotFoundException, InvalidQuantityException
 	{
 		boolean running = true;
 		// Run until user goes back to main menu

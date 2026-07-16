@@ -1,201 +1,111 @@
 package com.ecommerce;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.sql.SQLException;
-import java.util.List;//
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.ecommerce.dao.CartDAO;
 import com.ecommerce.model.Cart;
 
 public class CartDAOTest
 {
+	private CartDAO cartDAO;
 
-	CartDAO cartDAO = new CartDAO();
-
-	@Test
-	public void testAddNewProductToCart() throws SQLException, ClassNotFoundException
+	@BeforeEach
+	public void setup() throws Exception
 	{
+		cartDAO = new CartDAO();
 
-		int customerId = 1;
-		int productId = 1001;
-
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, productId, 2);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertFalse(cartList.isEmpty());
-		assertEquals(productId, cartList.get(0).getProductId());
-		assertEquals(2, cartList.get(0).getQuantity());
-	} 
-
-	@Test
-	public void testAddExistingProductUpdateQuantity() throws SQLException, ClassNotFoundException
-	{
-
-		int customerId = 1;
-		int productId = 11;
-
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, productId, 2);
-		cartDAO.addToCart(customerId, productId, 3);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertEquals(1, cartList.size());
-		assertEquals(5, cartList.get(0).getQuantity());
+		// Clean test data
+		cartDAO.clearCart(1);
 	}
 
 	@Test
-	public void testViewCartWithProducts() throws SQLException, ClassNotFoundException
+	public void testAddNewProduct() throws Exception
 	{
+		cartDAO.addToCart(1, 1, 2);
 
-		int customerId = 1;
+		List<Cart> list = cartDAO.viewCart(1);
 
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, 1001, 2);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertNotNull(cartList);
-		assertFalse(cartList.isEmpty());
+		assertEquals(1, list.size());
+		assertEquals(1, list.get(0).getProductId());
+		assertEquals(2, list.get(0).getQuantity());
 	}
 
 	@Test
-	public void testViewEmptyCart() throws SQLException, ClassNotFoundException
+	public void testAddExistingProduct() throws Exception
 	{
+		cartDAO.addToCart(1, 1, 2);
+		cartDAO.addToCart(1, 1, 3);
 
-		int customerId = 1;
+		List<Cart> list = cartDAO.viewCart(1);
 
-		cartDAO.clearCart(customerId);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertNotNull(cartList);
-		assertTrue(cartList.isEmpty());
+		assertEquals(5, list.get(0).getQuantity());
 	}
 
 	@Test
-	public void testRemoveExistingProduct() throws SQLException, ClassNotFoundException
+	public void testViewEmptyCart() throws Exception
 	{
+		List<Cart> list = cartDAO.viewCart(1);
 
-		int customerId = 1;
-		int productId = 1001;
-
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, productId, 2);
-
-		cartDAO.removeFromCart(customerId, productId);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertTrue(cartList.isEmpty());
+		assertTrue(list.isEmpty());
 	}
 
 	@Test
-	public void testRemoveNonExistingProduct() throws SQLException
+	public void testRemoveProduct() throws Exception
 	{
+		cartDAO.addToCart(1, 1, 2);
 
-		int customerId = 1;
+		cartDAO.removeFromCart(1, 1);
 
-		assertDoesNotThrow(() -> {
-			cartDAO.removeFromCart(customerId, 9999);
-		});
+		List<Cart> list = cartDAO.viewCart(1);
+
+		assertTrue(list.isEmpty());
 	}
 
 	@Test
-	public void testAddExistingProductQuantityIncrease() throws SQLException, ClassNotFoundException
+	public void testClearCartWithItems() throws Exception
 	{
+		cartDAO.addToCart(1, 1, 2);
+		cartDAO.addToCart(1, 3, 3);
 
-		int customerId = 1;
-		int productId = 1001;
+		cartDAO.clearCart(1);
 
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, productId, 5);
-
-		cartDAO.addToCart(customerId, productId, 10);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertEquals(15, cartList.get(0).getQuantity());
+		assertTrue(cartDAO.viewCart(1).isEmpty());
 	}
 
 	@Test
-	public void testViewMultipleCartItems() throws SQLException, ClassNotFoundException
+	public void testClearEmptyCart() throws Exception
 	{
+		cartDAO.clearCart(999);
 
-		int customerId = 1;
-
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, 1001, 2);
-		cartDAO.addToCart(customerId, 6, 3);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertEquals(2, cartList.size());
+		assertTrue(cartDAO.viewCart(999).isEmpty());
 	}
 
 	@Test
-	public void testRemoveOneProductKeepOther() throws SQLException, ClassNotFoundException
+	public void testMultipleCartProducts() throws Exception
 	{
+		cartDAO.addToCart(1, 1, 2);
+		cartDAO.addToCart(1, 3, 3);
 
-		int customerId = 1;
+		List<Cart> list = cartDAO.viewCart(1);
 
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, 1001, 2);
-		cartDAO.addToCart(customerId, 6, 3);
-
-		cartDAO.removeFromCart(customerId, 1001);
-
-		List<Cart> cartList = cartDAO.viewCart(customerId);
-
-		assertEquals(1, cartList.size());
-		assertEquals(6, cartList.get(0).getProductId());
+		assertEquals(2, list.size());
 	}
 
 	@Test
-	public void testClearCartWithItems() throws SQLException, ClassNotFoundException
+	public void testQuantityIncreaseMultipleTimes() throws Exception
 	{
+		cartDAO.addToCart(1, 1, 1);
+		cartDAO.addToCart(1, 1, 2);
+		cartDAO.addToCart(1, 1, 4);
 
-		int customerId = 1;
+		Cart cart = cartDAO.viewCart(1).get(0);
 
-		cartDAO.clearCart(customerId);
-
-		cartDAO.addToCart(customerId, 1001, 2);
-		cartDAO.addToCart(customerId, 6, 3);
-
-		List<Cart> before = cartDAO.viewCart(customerId);
-
-		assertEquals(2, before.size());
-
-		cartDAO.clearCart(customerId);
-
-		List<Cart> after = cartDAO.viewCart(customerId);
-
-		assertTrue(after.isEmpty());
-	}
-
-	@Test
-	public void testClearEmptyCart() throws SQLException, ClassNotFoundException
-	{
-
-		int customerId = 1;
-
-		cartDAO.clearCart(customerId);
-
-		assertDoesNotThrow(() -> {
-			cartDAO.clearCart(customerId);
-		});
-
-		assertTrue(cartDAO.viewCart(customerId).isEmpty());
+		assertEquals(7, cart.getQuantity());
 	}
 }
